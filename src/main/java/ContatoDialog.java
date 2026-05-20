@@ -1,33 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+// Contato Dialog:
+// Representa a caixa de dialogo de contato,
+// usado para inserir dados de contato
 
-/**
- *
- * @author ueg
- */
-public class ContatoDialog extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ContatoDialog.class.getName());
+public class ContatoDialog extends javax.swing.JDialog {
 
     private boolean confirmado = false;
-    private Contato contato;
+    private final Contato contato;
     
     /**
      * Creates new form ContatoDialog
      */
-    public ContatoDialog(javax.swing.JFrame parent, Contato contato) {
-        super(parent, contato == null ? "Novo Contato" : "Editar Contato", true);
+    public ContatoDialog(javax.swing.JPanel pai, Contato contato) {
+        super(javax.swing.SwingUtilities.getWindowAncestor(pai),
+                contato == null ? "Novo Contato" : "Editar Contato",
+                java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         this.contato = contato;
         
         initComponents();
+        setLocationRelativeTo(pai);
+        
+        if (contato != null) {
+            txtNome.setText(contato.getNome());
+            txtTelefone.setText(contato.getTelefone());
+            txtEmail.setText(contato.getEmail());
+        }
     }
-
-    ContatoDialog(AgendaView view, Object object) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,8 +35,7 @@ public class ContatoDialog extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        toolbar = new javax.swing.JToolBar();
-        painelPrincipal = new javax.swing.JPanel();
+        panelPrincipal = new javax.swing.JPanel();
         panelSuperior = new javax.swing.JPanel();
         lblNome = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
@@ -50,16 +47,16 @@ public class ContatoDialog extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(contato == null ? "Novo Contato" : "Editar Contato");
         setAlwaysOnTop(true);
+        setLocation(new java.awt.Point(0, 0));
+        setResizable(false);
         getContentPane().setLayout(new java.awt.BorderLayout(2, 2));
 
-        toolbar.setFloatable(true);
-        toolbar.setRollover(true);
+        panelPrincipal.setLayout(new javax.swing.BoxLayout(panelPrincipal, javax.swing.BoxLayout.PAGE_AXIS));
 
-        painelPrincipal.setLayout(new java.awt.GridLayout(2, 1));
-
-        panelSuperior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 10));
+        panelSuperior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING, 10, 10));
 
         lblNome.setText("Nome: ");
         panelSuperior.add(lblNome);
@@ -71,7 +68,6 @@ public class ContatoDialog extends javax.swing.JFrame {
         panelSuperior.add(lblTelefone);
 
         txtTelefone.setColumns(10);
-        txtTelefone.addActionListener(this::txtTelefoneActionPerformed);
         panelSuperior.add(txtTelefone);
 
         lblEmail.setText("Email: ");
@@ -80,12 +76,13 @@ public class ContatoDialog extends javax.swing.JFrame {
         txtEmail.setColumns(10);
         panelSuperior.add(txtEmail);
 
-        painelPrincipal.add(panelSuperior);
+        panelPrincipal.add(panelSuperior);
+
+        panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
         btnSalvar.setText("Salvar");
         btnSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSalvar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSalvar.addActionListener(this::btnSalvarActionPerformed);
         panelInferior.add(btnSalvar);
 
         btnCancelar.setText("Cancelar");
@@ -93,25 +90,20 @@ public class ContatoDialog extends javax.swing.JFrame {
         btnCancelar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         panelInferior.add(btnCancelar);
 
-        painelPrincipal.add(panelInferior);
+        panelPrincipal.add(panelInferior);
 
-        toolbar.add(painelPrincipal);
-
-        getContentPane().add(toolbar, java.awt.BorderLayout.LINE_START);
+        getContentPane().add(panelPrincipal, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefoneActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelefoneActionPerformed
-
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
+   
+    // Getters e Setters
     public boolean isConfirmado() { 
         return confirmado; 
+    }
+    
+    public void setConfirmado(boolean confirmado) {
+        this.confirmado = confirmado;
     }
     
     public String getNome() { 
@@ -126,33 +118,16 @@ public class ContatoDialog extends javax.swing.JFrame {
         return txtEmail.getText().trim(); 
     }
     
-    public Contato getContatoEditado() { 
-        return contatoEditado; 
+    public Contato getContato() { 
+        return contato; 
+    }
+    
+    public javax.swing.JButton getBtnCancelar() {
+        return btnCancelar;
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ContatoDialog().setVisible(true));
+    public javax.swing.JButton getBtnSalvar() {
+        return btnSalvar;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -161,10 +136,9 @@ public class ContatoDialog extends javax.swing.JFrame {
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblTelefone;
-    private javax.swing.JPanel painelPrincipal;
     private javax.swing.JPanel panelInferior;
+    private javax.swing.JPanel panelPrincipal;
     private javax.swing.JPanel panelSuperior;
-    private javax.swing.JToolBar toolbar;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtTelefone;

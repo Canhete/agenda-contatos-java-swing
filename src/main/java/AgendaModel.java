@@ -1,38 +1,34 @@
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+// Agenda Model:
+// Gerencia a parte lógica do programa, não sabe nada visual
 
-/**
- *
- * @author ueg
- */
 public class AgendaModel {
     private final List<Contato> contatos = new ArrayList<>();
     private final AtomicInteger proximoId = new AtomicInteger(1);
     
-    public void adicionarContato(Contato c) {
-        if (c.getId() == 0) {
-            c.setId(proximoId.getAndIncrement());
-        }
-        
-        contatos.add(c);
+    // Nome do arquivo
+    private static final String ARQUIVO = "contatos.csv";
+    
+    // Toda vez que é iniciado carrega o arquivo
+    public AgendaModel() {
+        carregarArquivo();
     }
     
-    public Contato novoContato(String nome, String tel, String email) {
-        Contato c = new Contato(proximoId.getAndIncrement(), nome, tel, email);
+    public void adicionarContato(String nome, String telefone, String email) {
+        Contato c = new Contato(proximoId.getAndIncrement(), nome, telefone, email);
+        
         contatos.add(c);
-        return c;
+        salvar();
     }
     
     public void removerContato(int id) {
         contatos.removeIf(c -> c.getId() == id);
+        
+        salvar();
     }
     
     public void atualizarContato(int id, String nome, String tel, String email) {
@@ -44,6 +40,8 @@ public class AgendaModel {
                 c.setTelefone(tel);
                 c.setEmail(email);
             });
+        
+        salvar();
     }
     
     public List<Contato> buscarContato(String termo) {
@@ -62,5 +60,32 @@ public class AgendaModel {
     
     public List<Contato> getTodosContatos() {
         return new ArrayList<>(contatos);
+    }
+    
+    // Carrega dados do arquivo
+    private void carregarArquivo() {
+        try {
+            List<Contato> carregados = PersistenciaContato.ler(ARQUIVO);
+            contatos.addAll(carregados);
+            
+            // Garante id único
+            carregados.stream()
+                    .mapToInt(Contato::getId)
+                    .max()
+                    .ifPresent(max -> proximoId.set(max + 1)); // Pega maior id e salva o próximo id depois desse
+            
+        } catch (java.io.FileNotFoundException e) {
+            // Caso o arquivo não exista, ignora, na primeira vez é normal isso acontecer
+        } catch (java.io.IOException e) {
+            System.err.println("Erro ao carregar csv: " + e.getMessage());
+        }
+    }
+    
+    private void salvar() {
+        try {
+            PersistenciaContato.gravar(ARQUIVO, contatos);
+        } catch (java.io.IOException e) {
+            System.out.println("Erro ao salvar csv: " + e.getMessage());
+        }
     }
 }

@@ -1,47 +1,11 @@
-
 import java.util.List;
-import javax.swing.table.TableModel;
+import javax.swing.table.DefaultTableModel;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+// Agenda View:
+// Gerencia a parte visual do programa, não sabe nada lógico
 
-
-/**
- *
- * @author ueg
- */
 public class AgendaView extends javax.swing.JPanel {
-
-    public javax.swing.JTextField getCampoBusca() {
-        return campoBusca;
-    }
-
-    public javax.swing.JTable getTabelaContatos() {
-        return tabelaContatos;
-    }
-
-    public void setTabelaContatos(javax.swing.JTable tabelaContatos) {
-        this.tabelaContatos = tabelaContatos;
-    }
-
-    public javax.swing.JButton getBtnAdicionar() {
-        return btnAdicionar;
-    }
-
-    public javax.swing.JButton getBtnBuscar() {
-        return btnBuscar;
-    }
-
-    public javax.swing.JButton getBtnEditar() {
-        return btnEditar;
-    }
-
-    public javax.swing.JButton getBtnRemover() {
-        return btnRemover;
-    }
-
+    
     /**
      * Creates new form AgendaView
      */
@@ -50,14 +14,16 @@ public class AgendaView extends javax.swing.JPanel {
     }
     
     public void atualizarTabela(List<Contato> contatos) {
-        TableModel modeloTabela = tabelaContatos.getModel().getValueAt(WIDTH, WIDTH);
-        
-        for (Contato c : contatos) {
-            modeloTabela.addRow(new Object[]{
-                c.getId(), c.getNome(), c.getTelefone(), c.getEmail()
-            });
-        }
+    DefaultTableModel modeloTabela = (DefaultTableModel) tabelaContatos.getModel();
+
+    modeloTabela.setRowCount(0); // limpa antes de popular, senão duplica
+
+    for (Contato c : contatos) {
+        modeloTabela.addRow(new Object[]{
+            c.getId(), c.getNome(), c.getTelefone(), c.getEmail()
+        });
     }
+}
     
     public int getIdSelecionado() {
         int row = tabelaContatos.getSelectedRow();
@@ -114,28 +80,32 @@ public class AgendaView extends javax.swing.JPanel {
         });
         tabelaContatos.setToolTipText("");
         tabelaContatos.setColumnSelectionAllowed(true);
+        tabelaContatos.setShowGrid(true);
         scrollPanel.setViewportView(tabelaContatos);
         tabelaContatos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         panelSuperior.add(scrollPanel);
 
-        campoBusca.setColumns(12);
+        campoBusca.setColumns(16);
         campoBusca.setToolTipText("");
         panelInferior.add(campoBusca);
 
         btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
+        btnBuscar.setToolTipText("Busca um contato");
         panelInferior.add(btnBuscar);
 
         btnAdicionar.setText("Adicionar");
-        btnAdicionar.addActionListener(this::btnAdicionarActionPerformed);
+        btnAdicionar.setToolTipText("Adiciona um contato");
         panelInferior.add(btnAdicionar);
 
         btnEditar.setText("Editar");
-        btnEditar.addActionListener(this::btnEditarActionPerformed);
+        btnEditar.setToolTipText("Edita um contato");
+        btnEditar.setEnabled(false);
         panelInferior.add(btnEditar);
 
         btnRemover.setText("Remover");
+        btnRemover.setToolTipText("Remove um contato");
+        btnRemover.setEnabled(false);
         panelInferior.add(btnRemover);
 
         panelSuperior.add(panelInferior);
@@ -143,18 +113,36 @@ public class AgendaView extends javax.swing.JPanel {
         add(panelSuperior, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdicionarActionPerformed
+    // Getters e Setters
+    public javax.swing.JTextField getCampoBusca() {
+        return campoBusca;
+    }
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditarActionPerformed
+    public javax.swing.JTable getTabelaContatos() {
+        return tabelaContatos;
+    }
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscarActionPerformed
-   
+    public javax.swing.JButton getBtnAdicionar() {
+        return btnAdicionar;
+    }
+
+    public javax.swing.JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public javax.swing.JButton getBtnEditar() {
+        return btnEditar;
+    }
+
+    public javax.swing.JButton getBtnRemover() {
+        return btnRemover;
+    }
+    
+    // Setters
+    public void setTabelaContatos(javax.swing.JTable tabelaContatos) {
+        this.tabelaContatos = tabelaContatos;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnBuscar;

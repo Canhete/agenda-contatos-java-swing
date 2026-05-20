@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
+// Classe Contato:
+// Guarda informações de uma entidade chamada Contato
+// que representa os dados de cada linha da tabela
 
-/**
- *
- * @author ueg
- */
 public class Contato {
+    // Atributos
     private int id;
     private String nome;
     private String telefone;
@@ -22,6 +18,7 @@ public class Contato {
         this.email = email;
     }
 
+    // Getters
     public int getId() {
         return id;
     }
@@ -38,19 +35,20 @@ public class Contato {
         return email;
     }
     
+    // Setters
     public void setId(int id) {
         this.id = id;
     }
 
-    void setNome(String nome) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    void setTelefone(String tel) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    void setEmail(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

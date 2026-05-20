@@ -1,13 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
-
-
 /**
- *
- * @author ueg
- */
+* @author canhete
+*/
+
+// Agenda App:
+// Inicializa, simplesmente instancia os módulos e os chama pra execução
+
 public class AgendaApp {
     public static void main(String[] args) {
        javax.swing.SwingUtilities.invokeLater(() -> {
@@ -15,7 +12,13 @@ public class AgendaApp {
            AgendaModel model = new AgendaModel();
            new AgendaController(view, model);
            
-           view.setVisible(true);
+           // Cria um JFrame para a agenda
+           javax.swing.JFrame frame = new javax.swing.JFrame("Agenda");
+           frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+           frame.add(view);
+           frame.pack();
+           frame.setLocationRelativeTo(null);
+           frame.setVisible(true);
        });
     }
 }
